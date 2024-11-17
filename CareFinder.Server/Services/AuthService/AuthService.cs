@@ -50,7 +50,27 @@ namespace CareFinder.Server.Services.AuthService
 
             try
             {
+                var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Email.ToLower() == email.ToLower());
 
+                if (doctor == null)
+                {
+                    response.Success = false;
+                    response.Message = "User not found";
+
+                    return response;
+                }
+                if (!VerifyPasswordHash(password, doctor.PasswordHash, doctor.PasswordSalt))
+                {
+                    response.Success = false;
+                    response.Message = "Wrong password";
+
+                    return response;
+                }
+
+                response.Data = CreateToken(doctor);
+                response.Message = "Welcome Back";
+
+                return response;
             }
             catch (Exception ex)
             {
