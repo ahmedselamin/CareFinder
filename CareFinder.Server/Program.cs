@@ -1,3 +1,4 @@
+global using CareFinder.Server.Data;
 global using CareFinder.Server.Models;
 global using CareFinder.Server.Services.AuthService;
 global using Microsoft.EntityFrameworkCore;
