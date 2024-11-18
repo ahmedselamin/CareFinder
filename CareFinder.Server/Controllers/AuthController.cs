@@ -34,5 +34,13 @@ namespace CareFinder.Server.Controllers
 
             return response.Success ? Ok(response) : BadRequest();
         }
+
+        [HttpPost("login")]
+        public async Task<ActionResult> Login([FromBody] LoginDTO request)
+        {
+            var response = await _authService.Login(request.Email, request.Password);
+
+            return response.Success ? Ok(response) : BadRequest();
+        }
     }
 }
