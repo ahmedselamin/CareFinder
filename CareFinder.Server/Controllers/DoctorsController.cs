@@ -20,5 +20,13 @@ namespace CareFinder.Server.Controllers
 
             return response.Success ? Ok(response) : BadRequest(response.Message);
         }
+
+        [HttpGet("/search/{searchText}")]
+        public async Task<ActionResult> SearchDoctors(string searchText)
+        {
+            var response = await _doctorService.SearchDoctors(searchText);
+
+            return response.Success ? Ok(response) : BadRequest(response.Message);
+        }
     }
 }
