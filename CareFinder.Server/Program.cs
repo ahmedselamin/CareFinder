@@ -1,6 +1,7 @@
 global using CareFinder.Server.Data;
 global using CareFinder.Server.Models;
 global using CareFinder.Server.Services.AuthService;
+global using CareFinder.Server.Services.BookingService;
 global using Microsoft.EntityFrameworkCore;
 global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 );
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 
 var app = builder.Build();
 
