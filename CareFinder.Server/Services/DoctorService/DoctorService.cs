@@ -1,5 +1,4 @@
-﻿
-namespace CareFinder.Server.Services.DoctorService
+﻿namespace CareFinder.Server.Services.DoctorService
 {
     public class DoctorService : IDoctorService
     {
@@ -38,9 +37,30 @@ namespace CareFinder.Server.Services.DoctorService
             }
         }
 
-        public Task<ServiceResponse<List<Doctor>>> SearchDoctors(string searchText)
+        public async Task<ServiceResponse<List<Doctor>>> SearchDoctors(string searchText)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<Doctor>>();
+
+            try
+            {
+                var doctor = await _context.Doctors
+                     .Where(d => d.FullName.ToLower().Contains(searchText.ToLower())
+                       ||
+                       d.Specialty.ToLower().Contains(searchText.ToLower())
+                     )
+                     .ToListAsync();
+
+
+                response.Data = doctor;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+
+                return response;
+            }
         }
     }
 }
