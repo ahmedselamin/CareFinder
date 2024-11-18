@@ -37,9 +37,9 @@
             }
         }
 
-        public async Task<ServiceResponse<List<Doctor>>> SearchDoctors(string searchText)
+        public async Task<ServiceResponse<List<DoctorSearchDTO>>> SearchDoctors(string searchText)
         {
-            var response = new ServiceResponse<List<Doctor>>();
+            var response = new ServiceResponse<List<DoctorSearchDTO>>();
 
             try
             {
@@ -47,8 +47,13 @@
                      .Where(d => d.FullName.ToLower().Contains(searchText.ToLower())
                        ||
                        d.Specialty.ToLower().Contains(searchText.ToLower())
-                     )
-                     .ToListAsync();
+                     ).Select(d => new DoctorSearchDTO
+                     {
+                         Id = d.Id,
+                         FullName = d.FullName,
+                         Specialty = d.Specialty,
+                         City = d.City,
+                     }).ToListAsync();
 
 
                 response.Data = doctor;

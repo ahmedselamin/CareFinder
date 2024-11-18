@@ -1,10 +1,12 @@
 global using CareFinder.Server.Data;
+global using CareFinder.Server.DTOs;
 global using CareFinder.Server.Models;
 global using CareFinder.Server.Services.AuthService;
 global using CareFinder.Server.Services.DoctorService;
 global using Microsoft.EntityFrameworkCore;
 global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
