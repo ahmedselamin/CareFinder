@@ -13,6 +13,31 @@ namespace CareFinder.Server.Services.DoctorService
             _context = context;
         }
 
+        public async Task<ServiceResponse<AvailabilitySlot>> AddAvailabilitySlot(int doctorId, AvailabilitySlot slot)
+        {
+            var response = new ServiceResponse<AvailabilitySlot>();
+
+            try
+            {
+                slot.Id = doctorId;
+
+                await _context.AvailabilitySlots.AddAsync(slot);
+                await _context.SaveChangesAsync();
+
+                response.Data = slot;
+                response.Message = "New slot added";
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+
+                return response;
+            }
+        }
+
         public async Task<ServiceResponse<Doctor>> GetDoctor(int doctorId)
         {
             var response = new ServiceResponse<Doctor>();
