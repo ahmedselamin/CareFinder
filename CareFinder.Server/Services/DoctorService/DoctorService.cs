@@ -38,6 +38,29 @@ namespace CareFinder.Server.Services.DoctorService
             }
         }
 
+        public async Task<ServiceResponse<List<AvailabilitySlot>>> GetAvailabilitySlots(int doctorId)
+        {
+            var response = new ServiceResponse<List<AvailabilitySlot>>();
+
+            try
+            {
+                var slots = await _context.AvailabilitySlots
+                    .Where(a => a.Id == doctorId)
+                    .ToListAsync();
+
+                response.Data = slots;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+
+                return response;
+            }
+        }
+
         public async Task<ServiceResponse<Doctor>> GetDoctor(int doctorId)
         {
             var response = new ServiceResponse<Doctor>();
