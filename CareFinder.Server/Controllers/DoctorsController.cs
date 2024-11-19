@@ -15,7 +15,7 @@ namespace CareFinder.Server.Controllers
             _doctorService = doctorService;
         }
 
-        [HttpGet("/{doctorId:int}")]
+        [HttpGet("{doctorId:int}")]
         public async Task<ActionResult> GetDoctor(int doctorId)
         {
             var response = await _doctorService.GetDoctor(doctorId);
@@ -23,10 +23,18 @@ namespace CareFinder.Server.Controllers
             return response.Success ? Ok(response) : BadRequest(response.Message);
         }
 
-        [HttpGet("/search/{searchText}")]
+        [HttpGet("search/{searchText}")]
         public async Task<ActionResult> SearchDoctors(string searchText)
         {
             var response = await _doctorService.SearchDoctors(searchText);
+
+            return response.Success ? Ok(response) : BadRequest(response.Message);
+        }
+
+        [HttpGet("fetch-slots/{doctorId:int}")]
+        public async Task<ActionResult> FetchSlots(int doctorId)
+        {
+            var response = await _doctorService.GetAvailabilitySlots(doctorId);
 
             return response.Success ? Ok(response) : BadRequest(response.Message);
         }
