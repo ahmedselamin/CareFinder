@@ -1,11 +1,15 @@
-﻿namespace CareFinder.Server.Services.DoctorService
+﻿using Microsoft.Extensions.Caching.Memory;
+
+namespace CareFinder.Server.Services.DoctorService
 {
     public class DoctorService : IDoctorService
     {
+        private readonly IMemoryCache _cache;
         private readonly DataContext _context;
 
-        public DoctorService(DataContext context)
+        public DoctorService(IMemoryCache cache, DataContext context)
         {
+            _cache = cache;
             _context = context;
         }
 
@@ -40,23 +44,31 @@
         public async Task<ServiceResponse<List<DoctorSearchDTO>>> SearchDoctors(string searchText)
         {
             var response = new ServiceResponse<List<DoctorSearchDTO>>();
+            var cacheKey = $"SearchDoctors_{searchText.ToLower()}";
 
             try
             {
-                var doctor = await _context.Doctors
-                     .Where(d => d.FullName.ToLower().Contains(searchText.ToLower())
-                       ||
-                       d.Specialty.ToLower().Contains(searchText.ToLower())
-                     ).Select(d => new DoctorSearchDTO
-                     {
-                         Id = d.Id,
-                         FullName = d.FullName,
-                         Specialty = d.Specialty,
-                         City = d.City,
-                     }).ToListAsync();
+                if (!_cache.TryGetValue(cacheKey, out List<DoctorSearchDTO>? cachedDoctors))
+                {
+                    cachedDoctors = await _context.Doctors
+                    .Where(d => d.FullName.ToLower().Contains(searchText.ToLower())
+                      || d.Specialty.ToLower().Contains(searchText.ToLower())
+                      || d.City.ToLower().Contains(searchText.ToLower())
+                    ).Select(d => new DoctorSearchDTO
+                    {
+                        Id = d.Id,
+                        FullName = d.FullName,
+                        Specialty = d.Specialty,
+                        City = d.City,
+                    }).ToListAsync();
 
+                    //cache results
+                    var cacheEntryOptions = new MemoryCacheEntryOptions()
+                        .SetSlidingExpiration(TimeSpan.FromMinutes(10));
+                    _cache.Set(cacheKey, cachedDoctors, cacheEntryOptions);
+                }
 
-                response.Data = doctor;
+                response.Data = cachedDoctors;
                 return response;
             }
             catch (Exception ex)
