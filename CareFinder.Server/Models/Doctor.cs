@@ -23,5 +23,6 @@
         public List<string> Qualifications { get; set; } = new List<string>();
         [Required]
         public string About { get; set; } = string.Empty;
+        public List<AvailabilitySlot> AvailabilitySlots { get; set; } = new List<AvailabilitySlot>();
     }
 }
