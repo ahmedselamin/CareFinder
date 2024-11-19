@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CareFinder.Server.Controllers
 {
@@ -25,6 +27,23 @@ namespace CareFinder.Server.Controllers
         public async Task<ActionResult> SearchDoctors(string searchText)
         {
             var response = await _doctorService.SearchDoctors(searchText);
+
+            return response.Success ? Ok(response) : BadRequest(response.Message);
+        }
+
+        [HttpPost("add-slot"), Authorize]
+        public async Task<ActionResult> AddNewSlot([FromBody] SlotDTO request)
+        {
+            var doctorId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var slot = new AvailabilitySlot
+            {
+                DoctorId = doctorId,
+                Day = request.Day,
+                StartsAt = request.StartAt,
+                EndsAt = request.EndsAt,
+            };
+
+            var response = await _doctorService.AddAvailabilitySlot(doctorId, slot);
 
             return response.Success ? Ok(response) : BadRequest(response.Message);
         }
