@@ -19,7 +19,7 @@ namespace CareFinder.Server.Services.DoctorService
 
             try
             {
-                slot.Id = doctorId;
+                slot.DoctorId = doctorId;
 
                 await _context.AvailabilitySlots.AddAsync(slot);
                 await _context.SaveChangesAsync();
