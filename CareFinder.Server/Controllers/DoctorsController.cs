@@ -47,7 +47,7 @@ namespace CareFinder.Server.Controllers
             {
                 DoctorId = doctorId,
                 Day = request.Day,
-                StartsAt = request.StartAt,
+                StartsAt = request.StartsAt,
                 EndsAt = request.EndsAt,
             };
 
