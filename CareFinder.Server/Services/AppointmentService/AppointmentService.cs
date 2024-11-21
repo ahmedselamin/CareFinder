@@ -5,9 +5,12 @@ namespace CareFinder.Server.Services.AppointmentService
     {
         private readonly DataContext _context;
 
-        public AppointmentService(DataContext context)
+        public INotificationService _notificationService { get; }
+
+        public AppointmentService(DataContext context, INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         public async Task<ServiceResponse<List<Appointment>>> FetchAllAppointments(int doctorId)
@@ -32,7 +35,6 @@ namespace CareFinder.Server.Services.AppointmentService
                 return response;
             }
         }
-
         public async Task<ServiceResponse<Appointment>> FetchAppointment(int doctorId, int appointmentId)
         {
             var response = new ServiceResponse<Appointment>();
@@ -113,6 +115,9 @@ namespace CareFinder.Server.Services.AppointmentService
 
                 await _context.Appointments.AddAsync(appointment);
                 await _context.SaveChangesAsync();
+
+                var message = $"{doctor.FullName}, you have a new appointment scheduled.";
+                await _notificationService.SendNofication(doctor.Id, message);
 
                 response.Data = true;
                 response.Message = "Appointment booked successfully";
