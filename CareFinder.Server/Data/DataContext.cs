@@ -12,6 +12,7 @@
                 .HasMany(d => d.AvailabilitySlots)
                 .WithOne()
                 .HasForeignKey(a => a.DoctorId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
 
             modelBuilder.Entity<Doctor>()
@@ -24,6 +25,7 @@
                 .HasOne<AvailabilitySlot>()
                 .WithOne()
                 .HasForeignKey<Appointment>(a => a.TimeSlotId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
         }
     }
