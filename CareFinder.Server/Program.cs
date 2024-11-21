@@ -1,6 +1,7 @@
 global using CareFinder.Server.Data;
 global using CareFinder.Server.DTOs;
 global using CareFinder.Server.Models;
+global using CareFinder.Server.Services.AppointmentService;
 global using CareFinder.Server.Services.AuthService;
 global using CareFinder.Server.Services.DoctorService;
 global using Microsoft.EntityFrameworkCore;
@@ -69,6 +70,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 
 var app = builder.Build();
 
