@@ -45,7 +45,6 @@ namespace CareFinder.Server.Controllers
             var doctorId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var slot = new AvailabilitySlot
             {
-                DoctorId = doctorId,
                 Day = request.Day,
                 StartsAt = request.StartsAt,
                 EndsAt = request.EndsAt,
