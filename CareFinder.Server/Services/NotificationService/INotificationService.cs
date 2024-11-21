@@ -2,5 +2,7 @@
 {
     public interface INotificationService
     {
+        Task<ServiceResponse<List<Notification>>> FetchAllNotification(int doctorId);
+        Task<ServiceResponse<bool>> SendNofication(Notification notification);
     }
 }
