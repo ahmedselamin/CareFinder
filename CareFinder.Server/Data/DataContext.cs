@@ -12,14 +12,14 @@
                 .HasMany(d => d.AvailabilitySlots)
                 .WithOne()
                 .HasForeignKey(a => a.DoctorId)
-                .OnDelete(DeleteBehavior.Cascade)
+                .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
 
             modelBuilder.Entity<Doctor>()
                 .HasMany(d => d.Appointments)
                 .WithOne()
                 .HasForeignKey(a => a.DoctorId)
-                .OnDelete(DeleteBehavior.Cascade)
+                .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
 
             modelBuilder.Entity<Appointment>()
