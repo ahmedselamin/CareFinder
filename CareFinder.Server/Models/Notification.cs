@@ -7,6 +7,6 @@
         public int Id { get; set; }
         public int DoctorId { get; set; }
         public required string Message { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTime Timestamp { get; set; } = DateTime.Now;
     }
 }
