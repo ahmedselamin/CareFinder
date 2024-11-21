@@ -19,6 +19,7 @@
                 .HasMany(d => d.Appointments)
                 .WithOne()
                 .HasForeignKey(a => a.DoctorId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
 
             modelBuilder.Entity<Appointment>()
