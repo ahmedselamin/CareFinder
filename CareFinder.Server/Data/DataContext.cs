@@ -11,17 +11,20 @@
             modelBuilder.Entity<Doctor>()
                 .HasMany(d => d.AvailabilitySlots)
                 .WithOne()
-                .HasForeignKey(a => a.DoctorId);
+                .HasForeignKey(a => a.DoctorId)
+                .IsRequired();
 
             modelBuilder.Entity<Doctor>()
                 .HasMany(d => d.Appointments)
                 .WithOne()
-                .HasForeignKey(a => a.DoctorId);
+                .HasForeignKey(a => a.DoctorId)
+                .IsRequired();
 
             modelBuilder.Entity<Appointment>()
                 .HasOne<AvailabilitySlot>()
                 .WithOne()
-                .HasForeignKey<Appointment>(a => a.TimeSlotId);
+                .HasForeignKey<Appointment>(a => a.TimeSlotId)
+                .IsRequired();
         }
     }
 }
