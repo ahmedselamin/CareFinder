@@ -24,5 +24,6 @@
         [Required]
         public string About { get; set; } = string.Empty;
         public List<AvailabilitySlot> AvailabilitySlots { get; set; } = new List<AvailabilitySlot>();
+        public List<Appointment> Appointments { get; set; } = new List<Appointment>();
     }
 }
