@@ -1,4 +1,5 @@
-﻿namespace CareFinder.Server.Services.AppointmentService
+﻿
+namespace CareFinder.Server.Services.AppointmentService
 {
     public class AppointmentService : IAppointmentService
     {
@@ -7,6 +8,29 @@
         public AppointmentService(DataContext context)
         {
             _context = context;
+        }
+
+        public async Task<ServiceResponse<List<Appointment>>> FetchAllAppointments(int doctorId)
+        {
+            var response = new ServiceResponse<List<Appointment>>();
+
+            try
+            {
+                var appointments = await _context.Appointments
+                    .Where(a => a.DoctorId == doctorId)
+                    .ToListAsync();
+
+                response.Data = appointments;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+
+                return response;
+            }
         }
         public async Task<ServiceResponse<bool>> CreateAppointment(Appointment appointment)
         {
@@ -73,5 +97,6 @@
                 return response;
             }
         }
+
     }
 }
