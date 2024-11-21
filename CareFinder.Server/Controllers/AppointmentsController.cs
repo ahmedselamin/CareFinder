@@ -39,5 +39,15 @@ namespace CareFinder.Server.Controllers
             return response.Success ? Ok(response) : BadRequest(response);
 
         }
+
+        [HttpGet("fetch-appointment/{appointmentId:int}"), Authorize]
+        public async Task<ActionResult> FetchAppointment(int appointmentId)
+        {
+            var doctorId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var response = await _appointmentService.FetchAppointment(doctorId, appointmentId);
+
+            return response.Success ? Ok(response) : BadRequest(response);
+
+        }
     }
 }
