@@ -1,5 +1,4 @@
-﻿
-namespace CareFinder.Server.Services.NotificationService
+﻿namespace CareFinder.Server.Services.NotificationService
 {
     public class NotificationService : INotificationService
     {
@@ -33,9 +32,33 @@ namespace CareFinder.Server.Services.NotificationService
             }
         }
 
-        public Task<ServiceResponse<bool>> SendNofication(Notification notification)
+        public async Task<ServiceResponse<bool>> SendNofication(int doctorId, string message)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<bool>();
+
+            try
+            {
+                var notifcation = new Notification
+                {
+                    DoctorId = doctorId,
+                    Message = message,
+                    Timestamp = DateTime.Now,
+                };
+
+                await _context.Notifications.AddAsync(notifcation);
+                await _context.SaveChangesAsync();
+
+                response.Data = true;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+
+                return response;
+            }
         }
     }
 }
