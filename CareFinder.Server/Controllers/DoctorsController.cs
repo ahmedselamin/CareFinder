@@ -10,9 +10,12 @@ namespace CareFinder.Server.Controllers
     {
         private readonly IDoctorService _doctorService;
 
-        public DoctorsController(IDoctorService doctorService)
+        public INotificationService _notificationService { get; }
+
+        public DoctorsController(IDoctorService doctorService, INotificationService notificationService)
         {
             _doctorService = doctorService;
+            _notificationService = notificationService;
         }
 
         [HttpGet("{doctorId:int}")]
@@ -51,6 +54,15 @@ namespace CareFinder.Server.Controllers
             };
 
             var response = await _doctorService.AddAvailabilitySlot(doctorId, slot);
+
+            return response.Success ? Ok(response) : BadRequest(response.Message);
+        }
+
+        [HttpGet("notifications"), Authorize]
+        public async Task<ActionResult> FetchNotifications()
+        {
+            var doctorId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var response = await _notificationService.FetchAllNotification(doctorId);
 
             return response.Success ? Ok(response) : BadRequest(response.Message);
         }
