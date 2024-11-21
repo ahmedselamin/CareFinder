@@ -23,6 +23,14 @@
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
 
+            modelBuilder.Entity<Doctor>()
+                .HasMany(d => Notifications)
+                .WithOne()
+                .HasForeignKey(n => n.DoctorId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired();
+
+
             modelBuilder.Entity<Appointment>()
                 .HasOne<AvailabilitySlot>()
                 .WithOne()
