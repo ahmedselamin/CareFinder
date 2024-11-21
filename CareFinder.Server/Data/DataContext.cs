@@ -18,7 +18,10 @@
                 .WithOne()
                 .HasForeignKey(a => a.DoctorId);
 
-
+            modelBuilder.Entity<Appointment>()
+                .HasOne<AvailabilitySlot>()
+                .WithOne()
+                .HasForeignKey<Appointment>(a => a.TimeSlotId);
         }
     }
 }
