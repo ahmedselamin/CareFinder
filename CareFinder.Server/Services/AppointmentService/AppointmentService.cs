@@ -32,6 +32,36 @@ namespace CareFinder.Server.Services.AppointmentService
                 return response;
             }
         }
+
+        public async Task<ServiceResponse<Appointment>> FetchAppointment(int doctorId, int appointmentId)
+        {
+            var response = new ServiceResponse<Appointment>();
+
+            try
+            {
+                var appointment = await _context.Appointments
+                    .FirstOrDefaultAsync(a => a.Id == appointmentId && a.DoctorId == doctorId);
+
+                if (appointment == null)
+                {
+                    response.Success = false;
+                    response.Message = "Not found";
+
+                    return response;
+                }
+
+                response.Data = appointment;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+
+                return response;
+            }
+        }
         public async Task<ServiceResponse<bool>> CreateAppointment(Appointment appointment)
         {
             var response = new ServiceResponse<bool>();
