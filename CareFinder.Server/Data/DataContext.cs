@@ -12,6 +12,13 @@
                 .HasMany(d => d.AvailabilitySlots)
                 .WithOne()
                 .HasForeignKey(a => a.DoctorId);
+
+            modelBuilder.Entity<Doctor>()
+                .HasMany(d => d.Appointments)
+                .WithOne()
+                .HasForeignKey(a => a.DoctorId);
+
+
         }
     }
 }
