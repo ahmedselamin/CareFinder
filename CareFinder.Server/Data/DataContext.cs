@@ -24,7 +24,7 @@
                 .IsRequired();
 
             modelBuilder.Entity<Doctor>()
-                .HasMany(d => Notifications)
+                .HasMany(d => d.Notifications)
                 .WithOne()
                 .HasForeignKey(n => n.DoctorId)
                 .OnDelete(DeleteBehavior.Cascade)
