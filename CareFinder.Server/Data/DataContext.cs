@@ -5,6 +5,7 @@
         public required DbSet<Doctor> Doctors { get; set; }
         public required DbSet<AvailabilitySlot> AvailabilitySlots { get; set; }
         public required DbSet<Appointment> Appointments { get; set; }
+        public required DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
