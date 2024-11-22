@@ -46,6 +46,12 @@ namespace CareFinder.Server.Controllers
         public async Task<ActionResult> AddNewSlot([FromBody] SlotDTO request)
         {
             var doctorId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            if (request.BreakInterval <= 0)
+            {
+                return BadRequest("You must add breaks");
+            }
+
             var slot = new AvailabilitySlot
             {
                 Day = request.Day,
