@@ -13,19 +13,58 @@ namespace CareFinder.Server.Services.DoctorService
             _context = context;
         }
 
-        public async Task<ServiceResponse<AvailabilitySlot>> AddAvailabilitySlot(int doctorId, AvailabilitySlot slot)
+        public async Task<ServiceResponse<AvailabilitySlot>> AddAvailabilitySlot(int doctorId, SlotDTO slot)
         {
             var response = new ServiceResponse<AvailabilitySlot>();
             var slots = new List<AvailabilitySlot>();
 
             try
             {
-                slot.DoctorId = doctorId;
+                if (slot.StartsAt >= slot.EndsAt)
+                {
+                    response.Success = false;
+                    response.Message = "Start time should be before end time";
 
-                await _context.AvailabilitySlots.AddAsync(slot);
+                    return response;
+                };
+
+                if (slot.BreakInterval >= 0)
+                {
+                    response.Success = false;
+                    response.Message = "You must add break interval";
+
+                    return response;
+                };
+
+                var currentStart = slot.StartsAt;  //staring point
+                while (currentStart <= slot.EndsAt)
+                {
+                    var currentEnd = slot.StartsAt.AddMinutes(slot.BreakInterval); //endpoint for slot
+
+                    //stop if the current slot exceeds the end time
+                    if (currentEnd > slot.EndsAt)
+                        break;
+
+                    //create new slot
+                    var newSlot = new AvailabilitySlot
+                    {
+                        DoctorId = doctorId,
+                        Day = slot.Day,
+                        StartsAt = currentStart,
+                        EndsAt = currentEnd,
+                        BreakInterval = slot.BreakInterval,
+                    };
+
+                    slots.Add(newSlot);
+
+                    //move to next slot
+                    currentStart = currentEnd;
+                }
+
+                await _context.AvailabilitySlots.AddRangeAsync(slots);
                 await _context.SaveChangesAsync();
 
-                response.Data = slot;
+                response.Data = slots;
                 response.Message = "New slot added";
 
                 return response;
