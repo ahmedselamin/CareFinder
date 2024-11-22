@@ -20,32 +20,31 @@ namespace CareFinder.Server.Services.DoctorService
 
             try
             {
+                // Validation
                 if (slot.StartsAt >= slot.EndsAt)
                 {
                     response.Success = false;
-                    response.Message = "Start time should be before end time";
-
+                    response.Message = "Start time should be before end time.";
                     return response;
-                };
+                }
 
-                if (slot.BreakInterval >= 0)
+                if (slot.BreakInterval <= 0)
                 {
                     response.Success = false;
-                    response.Message = "You must add break interval";
-
+                    response.Message = "Break interval must be greater than zero.";
                     return response;
-                };
+                }
 
-                var currentStart = slot.StartsAt;  //staring point
-                while (currentStart <= slot.EndsAt)
+                // Generate slots
+                var currentStart = slot.StartsAt;
+                while (currentStart < slot.EndsAt)
                 {
-                    var currentEnd = slot.StartsAt.AddMinutes(slot.BreakInterval); //endpoint for slot
+                    var currentEnd = currentStart.AddMinutes(slot.BreakInterval);
 
-                    //stop if the current slot exceeds the end time
+                    // Stop if the current slot exceeds the end time
                     if (currentEnd > slot.EndsAt)
                         break;
 
-                    //create new slot
                     var newSlot = new AvailabilitySlot
                     {
                         DoctorId = doctorId,
@@ -57,7 +56,7 @@ namespace CareFinder.Server.Services.DoctorService
 
                     slots.Add(newSlot);
 
-                    //move to next slot
+                    // Move to the next slot
                     currentStart = currentEnd;
                 }
 
@@ -65,18 +64,17 @@ namespace CareFinder.Server.Services.DoctorService
                 await _context.SaveChangesAsync();
 
                 response.Data = slots;
-                response.Message = "New slot added";
-
+                response.Message = "New slots added successfully.";
                 return response;
             }
             catch (Exception ex)
             {
                 response.Success = false;
                 response.Message = ex.Message;
-
                 return response;
             }
         }
+
 
         public async Task<ServiceResponse<List<AvailabilitySlot>>> GetAvailabilitySlots(int doctorId)
         {
