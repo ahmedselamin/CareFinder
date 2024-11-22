@@ -42,24 +42,12 @@ namespace CareFinder.Server.Controllers
             return response.Success ? Ok(response) : BadRequest(response.Message);
         }
 
-        [HttpPost("add-slot"), Authorize]
-        public async Task<ActionResult> AddNewSlot([FromBody] SlotDTO request)
+        [HttpPost("add-slots"), Authorize]
+        public async Task<ActionResult> AddNewSlots([FromBody] SlotDTO request)
         {
             var doctorId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            if (request.BreakInterval <= 0)
-            {
-                return BadRequest("You must add breaks");
-            }
-
-            var slot = new AvailabilitySlot
-            {
-                Day = request.Day,
-                StartsAt = request.StartsAt,
-                EndsAt = request.EndsAt,
-            };
-
-            var response = await _doctorService.AddAvailabilitySlot(doctorId, slot);
+            var response = await _doctorService.AddAvailabilitySlot(doctorId, request);
 
             return response.Success ? Ok(response) : BadRequest(response.Message);
         }
