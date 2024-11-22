@@ -2,9 +2,10 @@
 {
     public interface IDoctorService
     {
+        Task<ServiceResponse<List<Doctor>>> FetchDoctor();
+        Task<ServiceResponse<Doctor>> FetchDoctor(int doctorId);
         Task<ServiceResponse<List<DoctorSearchDTO>>> SearchDoctors(string searchText);
-        Task<ServiceResponse<Doctor>> GetDoctor(int doctorId);
-        Task<ServiceResponse<List<AvailabilitySlot>>> AddAvailabilitySlot(int doctorId, SlotDTO slot);
         Task<ServiceResponse<List<AvailabilitySlot>>> GetAvailabilitySlots(int doctorId);
+        Task<ServiceResponse<List<AvailabilitySlot>>> AddAvailabilitySlots(int doctorId, SlotDTO slot);
     }
 }
