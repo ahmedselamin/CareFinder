@@ -13,9 +13,9 @@ namespace CareFinder.Server.Services.DoctorService
             _context = context;
         }
 
-        public async Task<ServiceResponse<AvailabilitySlot>> AddAvailabilitySlot(int doctorId, SlotDTO slot)
+        public async Task<ServiceResponse<List<AvailabilitySlot>>> AddAvailabilitySlot(int doctorId, SlotDTO slot)
         {
-            var response = new ServiceResponse<AvailabilitySlot>();
+            var response = new ServiceResponse<List<AvailabilitySlot>>();
             var slots = new List<AvailabilitySlot>();
 
             try
