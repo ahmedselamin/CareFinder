@@ -4,7 +4,7 @@
     {
         Task<ServiceResponse<List<DoctorSearchDTO>>> SearchDoctors(string searchText);
         Task<ServiceResponse<Doctor>> GetDoctor(int doctorId);
-        Task<ServiceResponse<AvailabilitySlot>> AddAvailabilitySlot(int doctorId, AvailabilitySlot slot);
+        Task<ServiceResponse<AvailabilitySlot>> AddAvailabilitySlot(int doctorId, SlotDTO slot);
         Task<ServiceResponse<List<AvailabilitySlot>>> GetAvailabilitySlots(int doctorId);
     }
 }
